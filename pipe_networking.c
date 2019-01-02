@@ -17,10 +17,10 @@ int server_handshake(int *to_client) {
   }
   char buff[HANDSHAKE_BUFFER_SIZE];
   read(upstream,buff,HANDSHAKE_BUFFER_SIZE);
+  remove("s2c");
   char * wrfile=buff;
   *to_client=open(wrfile,O_WRONLY);
   printf("[subserver for fd:%d]Name of Client's Private Pipe Received: %s\n",*to_client,wrfile);
-  remove("s2c");
   if(*to_client==-1){
     printf("%s \n",strerror(errno));
   }

@@ -46,6 +46,7 @@ int main() {
 	fflush(stdout);
 	data=calloc(BUFFER_SIZE,sizeof(char));
       }
+      remove("s2c");
     }
     else{
       close(from_client);
