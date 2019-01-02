@@ -30,19 +30,26 @@ int main() {
   int from_client;
 
   while(1){
+    int s2cp=mkfifo("s2c",0644);
+    if(s2cp==-1){
+      printf("%s \n",strerror(errno));
+    }
+    printf("[server]Well-Known FIFO s2c created\n");
     from_client = server_handshake( &to_client );
     char * data=calloc(BUFFER_SIZE,sizeof(char));
+    
     if(!fork()){
       while(read(from_client,data,BUFFER_SIZE)){
-        char * response=encryptstring(data);
-        write(to_client,response,strlen(response)+1);
-        printf("[client %d] %s\n",from_client,data);
-        fflush(stdout);
-        data=calloc(BUFFER_SIZE,sizeof(char));
+	char * response=encryptstring(data);
+	write(to_client,response,strlen(response)+1);
+	printf("[client %d] %s\n",to_client,data);
+	fflush(stdout);
+	data=calloc(BUFFER_SIZE,sizeof(char));
       }
     }
     else{
       close(from_client);
+      remove("s2c");
     }
   }
 }

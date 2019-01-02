@@ -11,11 +11,6 @@
   returns the file descriptor for the upstream pipe.
   =========================*/
 int server_handshake(int *to_client) {
-  int s2cp=mkfifo("/tmp/s2c",0644);
-  if(s2cp==-1){
-    printf("%s \n",strerror(errno));
-  }
-  printf("[server]Well-Known FIFO s2c created\n");
   int upstream=open("s2c",O_RDONLY);
   if(upstream==-1){
     printf("%s \n",strerror(errno));
@@ -26,7 +21,6 @@ int server_handshake(int *to_client) {
   *to_client=open(wrfile,O_WRONLY);
   printf("[subserver for fd:%d]Name of Client's Private Pipe Received: %s\n",*to_client,wrfile);
   remove("s2c");
-  printf("Removed WKP\n");
   if(*to_client==-1){
     printf("%s \n",strerror(errno));
   }
